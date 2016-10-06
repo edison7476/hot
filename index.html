@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<!--  I did this using bootstrap modal. It can also be done using Augular ng-view and routing to switch pages-->
+<head>
+    <meta charset="utf-8">
+    <title>Hotel Booking Demo</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <script src="roomController.js"></script>
+    <link rel="stylesheet" href="style.css" media="screen" title="no title">
+    <style media="screen">
+    </style>
+</head>
+
+<body ng-controller="roomController" style="padding-top:20px" class="modal-open">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Brand</a>
+      </div>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+          <li><a href="#">Link</a></li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#">Link</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Action</a></li>
+              <li><a href="#">Another action</a></li>
+              <li><a href="#">Something else here</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="#">Separated link</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+    <!--  we can put the following code into directvie-->
+    <div class="wrap" ng-repeat="room in roomData " ng-hide="$last">
+        <div class="col-xs-4 col-sm-4 col-md-4 ">
+            <div class="thumbnail">
+                <img src="{{ room.image_url}}" alt="" />
+                <div class="caption" >
+                    <h4>{{ room.short_desc }}</h4>
+                    <p class="long_desc" >{{ room.long_desc }}</p>
+                    <h5>Price: {{ room.room_price }}/Night</h5>
+                    <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#bookRoomModal" ng-click="bookRoom(room)">Book Room</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  ############################### -->
+
+
+    <!--  Guest Information Modal -->
+    <div ng-controller="roomController" class="modal fade" id="bookRoomModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Booking Information</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" name="bookForm">
+                      <!--  First Name -->
+                        <div class="form-group">
+                            <label for="title" class="col-sm-3 control-label">First Name:</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="first_name" class="form-control" placeholder="First Name" ng-model="guest.first_name" ng-minlength='2' required>
+                                <span ng-show='bookForm.first_name.$touched && bookForm.first_name.$error.required' style="color:red">Name field cannot be empty!</span>
+                                <span ng-show='bookForm.first_name.$touched && bookForm.first_name.$error.minlength' style="color:red">First name must have at least 2 chars!</span>
+                            </div>
+                        </div>
+                        <!--  Last Name -->
+                        <div class="form-group">
+                            <label for="title" class="col-sm-3 control-label">Last Name:</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="last_name" class="form-control" placeholder="Last Name"  ng-model="guest.last_name" ng-minlength='2' required>
+                                <span ng-show='bookForm.last_name.$touched && bookForm.last_name.$error.required' style="color:red">Name field cannot be empty!</span>
+                                <span ng-show='bookForm.last_name.$touched && bookForm.last_name.$error.minlength' style="color:red">Last name must have at least 2 chars!</span>
+                            </div>
+                        </div>
+                        <!--  Email -->
+                        <div class="form-group">
+                            <label for="imgURL" class="col-sm-3 control-label">Email:</label>
+                            <div class="col-sm-9">
+                                <input class="form-control" name="email" placeholder="Email" type="text" ng-model="guest.email" ng-pattern="/^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/" required>
+                                <span ng-show='bookForm.email.$touched && bookForm.email.$error.required' style="color:red">Email field cannot be empty!</span>
+                                <span ng-show='bookForm.email.$touched && bookForm.email.$error.pattern' style="color:red">Not a valid email! Please provide a valid email.</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <button type="button" class="btn btn-warning pull-right" ng-click='confirmRoom(guest)' data-dismiss="modal" data-toggle="modal" data-target="#confirmationModal">Book</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  End of Guest Information Modal -->
+
+    <!--  Booking Confirmation Modal -->
+    <div ng-controller="roomController" class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Booked Room Information</h4>
+                </div>
+                <div class="modal-body">
+                  <img class="col-sm-3 col-md-3"src="{{bookingInfo.roomInfo.image_url}}" alt="" />
+                  <div class="col-sm-4 col-md-4">
+                    <p>Guest Name: </p>
+                    <p>Room Type: </p>
+                    <p>Price: </p>
+                    <p ng-if="bookingInfo.ChampagneStrawberries.room_price">Champagne&Strawberries:</p>
+                  </div>
+                  <div class="col-sm-5 col-md-5"> <!-- Display booking information guest name, room type, price-->
+                    <p>{{ bookingInfo.guestInfo.first_name | capitalize }} {{ bookingInfo.guestInfo.last_name | capitalize }}</p>
+                    <p>{{ bookingInfo.roomInfo.short_desc }}</p>
+                    <p>{{ bookingInfo.roomInfo.room_price }}</p>
+                    <p>{{ bookingInfo.ChampagneStrawberries.room_price }}
+                      <a ng-if="bookingInfo.ChampagneStrawberries.room_price" href="" style="color:red" ng-click="remove()"> Remove</a>
+                    </p>
+                  </div>
+
+                    <table class="table table-hover" ng-repeat="upgradeOption in roomData" >
+                        <tr ng-show="(upgradeOption.item_id > bookingInfo.roomInfo.item_id) && (upgradeOption.item_id < 103)">
+                            <td colspan="3">Upgrade to {{ upgradeOption.room_code}} room for only {{ upgradeOption.price}}</td>
+                            <td><button type="button" class="btn btn-info btn-sm pull-right" ng-click='upgrade(upgradeOption)'>Upgrade</button></td>
+                        </tr>
+                        <tr ng-show="(upgradeOption.item_id < bookingInfo.roomInfo.item_id) && (upgradeOption.item_id < 103)">
+                            <td colspan="4" style="color:red"><a href="" ng-click='upgrade(upgradeOption)'>I would like to check {{ upgradeOption.room_code}} room</a>
+                        </tr>
+                        <tr ng-show="(upgradeOption.item_id == 103 && bookingInfo.roomInfo.room_price > 199) && !bookingInfo.ChampagneStrawberries.room_price">
+                          <td colspan="3">Add {{ upgradeOption.short_desc}} for {{ upgradeOption.price}} </td>
+                          <td><button type="button" class="btn btn-info btn-sm pull-right" ng-click='add(upgradeOption)'>Add</button></td>
+                        </tr>
+                    </table>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning pull-right" ng-click='finalConfirm(bookingInfo)' data-dismiss="modal" data-toggle="modal" data-target="#finalConfirmModal">Confirm</button>
+                    </div>
+                </div>
+              </div>
+          </div>
+      </div>
+<!--  End of Booking confirmation Modal -->
+
+<!--  Final confirmation Modal -->
+<div ng-controller="roomController" class="modal fade" id="finalConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="printModalContent">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Confirmation</h4>
+            </div>
+            <div class="modal-body">
+              <img class="col-sm-4"src="{{bookingInfo.roomInfo.image_url}}" alt="" />
+              <h4>Thank you for choosing our hotel </h4>
+              <div class="col-sm-3">
+                <p>Guest Name: </p>
+                <p>Room Type: </p>
+                <p>Total Price: </p>
+              </div>
+              <div class="col-sm-5"> <!-- Display booking information guest name, room type, price-->
+                <p>{{ bookingInfo.guestInfo.first_name  }} {{ bookingInfo.guestInfo.last_name}}</p>
+                <p>{{ bookingInfo.roomInfo.short_desc }}</p>
+                <p>{{ bookingInfo.roomInfo.room_price + bookingInfo.ChampagneStrawberries.room_price }}</p>
+              </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Finish</button>
+                </div>
+            </div>
+          </div>
+      </div>
+  </div>
+
+<!--  End of final confirmation Modal -->
+<div class="container" >
+</div>
+<script src="js/jquery-1.11.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
+
+</html>

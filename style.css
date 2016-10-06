@@ -1,0 +1,28 @@
+
+body {
+  background: url(backgroundImg4.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+.caption h4, .caption h5, .caption p{
+  color: white;
+  padding: 10px;
+}
+.caption p{
+  height: 40%
+}
+
+.thumbnail, #footer{
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.footer-bottom {
+    background-color: rgba(255, 245, 195, 0.6);
+    min-height: 30px;
+    width: 100%;
+}
+.footer-bottom a{
+  color: #0024ff
+}
