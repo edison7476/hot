@@ -97,7 +97,8 @@ myApp.controller('roomController', function($scope) {
           $scope.message = info;
         })*/
     };
-    /*
+
+    /* the process of passing data to the back end 
       //in bookRoomFactory pass the data to backend throught route using $http
 
         myApp.factory('bookRoomFactory', function($http){
