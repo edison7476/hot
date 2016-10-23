@@ -1,13 +1,19 @@
 var myApp = angular.module('myApp', ['ui.bootstrap']);
 
 myApp.controller('roomController', function($scope, $http, $modal) {
+
     $scope.today = new Date();
     $scope.rates = {};
 
+//  Currency exchange rate API call
+// ######################################################
     $http.get('http://api.fixer.io/latest?base=USD')
         .then(function(res) {
             $scope.rates = res.data.rates;
         });
+// ######################################################
+
+
     $scope.forExConvert = function(value) {
         console.log(value);
         console.log($scope.rates);
@@ -20,36 +26,42 @@ myApp.controller('roomController', function($scope, $http, $modal) {
         }
     };
 
-    // setting the check out date to be at lease one day after the check In date
+// setting the check out date to be at lease one day after the check In date
+// ######################################################
     $scope.checkOut = function(guest) {
         console.log("guest.checkInDate = ", guest.checkInDate);
         var checkOutMin = new Date();
         var checkOutDate = guest.checkInDate;
-        // console.log("checkOutDate = ", checkOutDate.getDate()+1);
-        // $scope.checkOutMin =
-        console.log("guest.checkOutMin= ", checkOutMin.setDate(checkOutDate.getDate() + 1));
+
+        // restrict the check-out date to be at least one day after the selected check-in date
+        checkOutMin.setDate(checkOutDate.getDate() + 1);
         $scope.guest.checkOutMinDate = checkOutMin;
-        console.log("$scope.guest.checkOutMinDate = ", $scope.guest.checkOutMinDate);
     };
-    console.log("$socpe.today =", $scope.today);
-    // console.log("checkOutdate = ", checkOutdate);
+// ######################################################
 
+// This function takes the selected room information
+/*
 
+The problem is that you are running your example off the file system (using the file:// protocol) and many browsers (Chrome, Opera) restricts XHR calls when using the file:// protocol.
+AngularJS templates are downloaded via XHR and this, combined with the usage of the file:// protocol results in the error you are getting.
+
+*/
+
+// ######################################################
     $scope.bookRoom = function(room) {
       var modalInstance = $modal.open({
-       templateUrl: 'Modal.html',
-       controller: 'ModalInstanceCtrl',
-       windowClass: 'small-size-modal',
-       size: size,
-       scope: $scope
+         templateUrl: "guestInfoModal.html",
+         controller: geustModalController,
+         windowClass: 'small-size-modal',
+         size: 'sm',
+         scope: $scope
      });
-
         $scope.bookingInfo = {};
         console.log('room = ', room);
         $scope.bookingInfo.roomInfo = room;
         console.log('bookingInfo adding roomInfo', $scope.bookingInfo);
     };
-
+// ######################################################
 
 
     $scope.confirmRoom = function(guest) {
@@ -140,8 +152,6 @@ myApp.controller('roomController', function($scope, $http, $modal) {
             "room_price": 100
         }
     ];
-
-
     /*
       //in bookRoomFactory pass the data to backend throught route using $http
 
@@ -172,12 +182,12 @@ myApp.controller('roomController', function($scope, $http, $modal) {
 
 });
 
-myApp.filter('capitalize', function() {
-    return function(input, scope) {
-        console.log(input);
-        console.log(typeof(input));
-        if (typeof(input) !== "undefined")
-            input = input.toLowerCase();
-        return input.substring(0, 1).toUpperCase() + input.substring(1);
-    };
-});
+// order_app.filter('capitalize', function() {
+//   return function(input, scope) {
+//     console.log(input);
+//     console.log(typeof(input));
+//     if (typeof(input) !== "undefined")
+//     input = input.toLowerCase();
+//     return input.substring(0,1).toUpperCase()+input.substring(1);
+//   };
+// });

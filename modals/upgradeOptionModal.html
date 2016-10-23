@@ -1,0 +1,59 @@
+<div ng-controller="roomController" class="modal fade upgradeModal" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Booked Room Information</h4>
+            </div>
+            <div class="modal-body">
+                <img class="col-sm-3 col-md-3" src="{{bookingInfo.roomInfo.image_url}}" alt="" />
+                <div class="col-sm-4 col-md-4">
+                    <p>Guest Name: </p>
+                    <p>Room Type: </p>
+                    <p>Check In: </p>
+                    <p>Check Out: </p>
+                    <p ng-if="bookingInfo.ChampagneStrawberries.room_price">Champagne&Strawberries:</p>
+                    <p >Total Price: </p>
+                </div>
+                <div class="col-sm-5 col-md-5">
+                    <!-- Display booking information guest name, room type, price-->
+                    <p>{{ bookingInfo.guestInfo.first_name | uppercase }} {{ bookingInfo.guestInfo.last_name | uppercase }}</p>
+                    <p>{{ bookingInfo.roomInfo.short_desc }}</p>
+                    <p>{{ bookingInfo.guestInfo.checkInDate | date }}</p>
+                    <p>{{ bookingInfo.guestInfo.checkOutDate| date }}</p>
+                    <p ng-if="bookingInfo.ChampagneStrawberries.room_price">
+                      <span ng-hide="fromType">{{ bookingInfo.ChampagneStrawberries.room_price }} (USD)<a  href="" style="color:red" class="close" ng-click="remove()">x</a></span>
+                      <span ng-show="fromType">{{ bookingInfo.ChampagneStrawberries.room_price * fromType | number: 2}} ({{currency}})<a  href="" style="color:red" class="close" ng-click="remove()">x</a></span>
+                    </p>
+                    <p ng-hide="fromType">{{ bookingInfo.roomInfo.room_price * ( (bookingInfo.guestInfo.checkOutDate - bookingInfo.guestInfo.checkInDate)/86400000 ) + bookingInfo.ChampagneStrawberries.room_price }} (USD) </p>
+                    <p ng-show="fromType">{{ fromType * (bookingInfo.roomInfo.room_price * ( (bookingInfo.guestInfo.checkOutDate - bookingInfo.guestInfo.checkInDate)/86400000 ) + bookingInfo.ChampagneStrawberries.room_price ) | number: 2}} ({{ currency }})  </p>
+                </div>
+
+<!--  upgrade options-->
+                <table class="table table-hover" ng-repeat="upgradeOption in roomData">
+                    <tr ng-show="(upgradeOption.item_id > bookingInfo.roomInfo.item_id) && (upgradeOption.item_id < 103)">
+                        <td><img src="{{ upgradeOption.image_url}}" alt="" /></td>
+                        <td colspan="2">Upgrade to {{ upgradeOption.room_code}} room for only {{ upgradeOption.price}}</td>
+                        <td>
+                            <button type="button" class="btn btn-info btn-sm pull-right" ng-click='upgrade(upgradeOption)'>Upgrade</button>
+                        </td>
+                    </tr>
+                    <tr ng-show="(upgradeOption.item_id < bookingInfo.roomInfo.item_id) && (upgradeOption.item_id < 103)">
+                      <td><img src="{{ upgradeOption.image_url}}" alt="" /></td>
+                        <td colspan="3" style="color:red"><a href="" ng-click='upgrade(upgradeOption)'>I would like to check {{ upgradeOption.room_code}} room</a>
+                    </tr>
+                    <tr ng-show="(upgradeOption.item_id == 103 && (bookingInfo.roomInfo.room_price * ((bookingInfo.guestInfo.checkOutDate - bookingInfo.guestInfo.checkInDate)/86400000 )) > 199) && !bookingInfo.ChampagneStrawberries.room_price">
+                      <td><img src="{{ upgradeOption.image_url}}" alt="" /></td>
+                        <td colspan="2">Add {{ upgradeOption.short_desc}} for {{ upgradeOption.price}} </td>
+                        <td>
+                            <button type="button" class="btn btn-info btn-sm pull-right" ng-click='add(upgradeOption)'>Add</button>
+                        </td>
+                    </tr>
+                </table>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning pull-right" ng-click='finalConfirm(bookingInfo)' data-dismiss="modal" data-toggle="modal" data-target="#finalConfirmModal">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

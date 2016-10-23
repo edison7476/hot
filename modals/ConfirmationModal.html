@@ -1,0 +1,33 @@
+<div ng-controller="roomController" class="modal fade" id="finalConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="printModalContent">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Confirmation</h4>
+            </div>
+            <div class="modal-body">
+                <img class="col-sm-4" src="{{bookingInfo.roomInfo.image_url}}" alt="" />
+                <h4>Thank you for choosing our hotel </h4>
+                <div class="col-sm-3">
+                    <p>Guest Name: </p>
+                    <p>Room Type: </p>
+                    <p>Check In: </p>
+                    <p>Check Out: </p>
+                    <p>Total Price: </p>
+                </div>
+                <div class="col-sm-5">
+                    <!-- Display booking information guest name, room type, price-->
+                    <p>{{ bookingInfo.guestInfo.first_name }} {{ bookingInfo.guestInfo.last_name}}</p>
+                    <p>{{ bookingInfo.roomInfo.short_desc }}</p>
+                    <p>{{ bookingInfo.guestInfo.checkInDate | date }}</p>
+                    <p>{{ bookingInfo.guestInfo.checkOutDate| date }}</p>
+                    <p ng-hide="fromType">{{ (bookingInfo.roomInfo.room_price * ((bookingInfo.guestInfo.checkOutDate - bookingInfo.guestInfo.checkInDate)/86400000))+ bookingInfo.ChampagneStrawberries.room_price }} (USD) </p>
+                    <p ng-show="fromType">{{ fromType * (bookingInfo.roomInfo.room_price * ( (bookingInfo.guestInfo.checkOutDate - bookingInfo.guestInfo.checkInDate)/86400000 ) + bookingInfo.ChampagneStrawberries.room_price ) | number: 2}} ({{ currency }}) </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Finish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
