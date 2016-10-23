@@ -8,7 +8,11 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-    <script src="roomController.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.4/ui-bootstrap-tpls.min.js"></script>
+
+
+    <script src="Controllers/roomController.js"></script>
+    <script src="Controllers/modalController.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <link rel="stylesheet" href="style.css" media="screen" title="no title">
     <script>
@@ -21,12 +25,12 @@
                 tallest = thisHeight;
             }
           });
-        group.each(function() { $(this).height(tallest); });
+        group.each(function() { $(this).height(tallest + 50); });
       }
 
       jQuery(document).ready(function() {
-    equalHeight(jQuery(".caption"));
-});
+        equalHeight(jQuery(".caption"));
+      });
     </script>
 </head>
 
@@ -220,15 +224,6 @@
     <!--  End of final confirmation Modal -->
     <div class="container">
     </div>
-    <!-- <div class="footer-bottom ">
-      <div class="container">
-        <p>I didn't find the room prices, so I just made them up as the following prices. Queen Room = $180 ,King Room = $205, Suite Room = $235 </p>
-        <p>To suppoet different currencies and different languages, we can creat HTML select tags with options to select what language or currency we want to transfer,
-          then we can call open source APIs such as open exchange rate API (documentaion can be found at <a href="https://openexchangerates.org/">https://openexchangerates.org/</a>)
-            and Yandex Translate API (documentaion can be found at <a href="https://tech.yandex.com/translate/">https://tech.yandex.com/translate/</a>) to grap the exchange rate and the language we want.
-        </p>
-      </div>
-    </div> -->
     <script src="js/jquery-1.11.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 </body>
