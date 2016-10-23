@@ -5,14 +5,13 @@ myApp.controller('roomController', function($scope, $http, $modal) {
     $scope.today = new Date();
     $scope.rates = {};
 
+// ###################################################################################
 //  Currency exchange rate API call
-// ######################################################
+// ###################################################################################
     $http.get('http://api.fixer.io/latest?base=USD')
         .then(function(res) {
             $scope.rates = res.data.rates;
         });
-// ######################################################
-
 
     $scope.forExConvert = function(value) {
         console.log(value);
@@ -26,8 +25,9 @@ myApp.controller('roomController', function($scope, $http, $modal) {
         }
     };
 
+// ###################################################################################
 // setting the check out date to be at lease one day after the check In date
-// ######################################################
+// ###################################################################################
     $scope.checkOut = function(guest) {
         console.log("guest.checkInDate = ", guest.checkInDate);
         var checkOutMin = new Date();
@@ -37,23 +37,15 @@ myApp.controller('roomController', function($scope, $http, $modal) {
         checkOutMin.setDate(checkOutDate.getDate() + 1);
         $scope.guest.checkOutMinDate = checkOutMin;
     };
-// ######################################################
 
+
+// ###################################################################################
 // This function takes the selected room information
-/*
-
-The problem is that you are running your example off the file system (using the file:// protocol) and many browsers (Chrome, Opera) restricts XHR calls when using the file:// protocol.
-AngularJS templates are downloaded via XHR and this, combined with the usage of the file:// protocol results in the error you are getting.
-
-*/
-
-// ######################################################
+// ###################################################################################
     $scope.bookRoom = function(room) {
       var modalInstance = $modal.open({
-         templateUrl: "guestInfoModal.html",
-         controller: geustModalController,
-         windowClass: 'small-size-modal',
-         size: 'sm',
+         templateUrl: "modals/guestInfoModal.html",
+         controller: "roomController",
          scope: $scope
      });
         $scope.bookingInfo = {};
@@ -61,10 +53,17 @@ AngularJS templates are downloaded via XHR and this, combined with the usage of 
         $scope.bookingInfo.roomInfo = room;
         console.log('bookingInfo adding roomInfo', $scope.bookingInfo);
     };
-// ######################################################
 
-
+// ###################################################################################
+//
+// ###################################################################################
     $scope.confirmRoom = function(guest) {
+      var modalInstance = $modal.open({
+         templateUrl: "modals/upgradeOptionModal.html",
+         controller: "roomController",
+         scope: $scope
+     });
+
         $scope.bookingInfo.guestInfo = guest;
         // $scope.bookingInfo.total_price = $scope.bookingInfo.roomInfo.room_price * ( ($scope.bookingInfo.guestInfo.checkOutDate - $scope.bookingInfo.guestInfo.checkInDate)/86400000 );
         console.log('bookingInfo adding guestInfo', $scope.bookingInfo.guestInfo);
@@ -76,11 +75,19 @@ AngularJS templates are downloaded via XHR and this, combined with the usage of 
         console.log("scope.room = ", $scope.room);
     };
 
+
+// ###################################################################################
+//
+// ###################################################################################
     $scope.upgrade = function(upgradeOption) {
         console.log('upgradeInfo = ', upgradeOption);
         $scope.bookingInfo.roomInfo = upgradeOption;
     };
 
+
+// ###################################################################################
+//  Add / Remove Champagne & Strawberries
+// ###################################################################################
     $scope.add = function(upgradeOption) {
         console.log('upgradeInfo = ', upgradeOption);
         $scope.bookingInfo.ChampagneStrawberries = upgradeOption;
@@ -88,13 +95,21 @@ AngularJS templates are downloaded via XHR and this, combined with the usage of 
     };
 
     $scope.remove = function() {
-        // console.log('removeThis = ', removeThis);
         $scope.bookingInfo.ChampagneStrawberries = {};
         console.log('After removing ChampagneStrawberries - book room info', $scope.bookingInfo);
     };
 
+
+// ###################################################################################
+//
+// ###################################################################################
     $scope.finalConfirm = function(bookingInfo) {
         console.log('final confirmation', bookingInfo);
+        var modalInstance = $modal.open({
+           templateUrl: "modals/confirmationModal.html",
+           controller: "roomController",
+           scope: $scope
+       });
         var bookedRoomInfo = {
             first_name: bookingInfo.guestInfo.first_name,
             last_name: bookingInfo.guestInfo.last_name,

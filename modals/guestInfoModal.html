@@ -1,0 +1,65 @@
+<!--  Guest Information Modal -->
+<div ng-controller="roomController" >
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="dismissModal()"><span aria-hidden="true">&times;</span></button>
+                      <h4 class="modal-title" id="myModalLabel">Booking Information</h4>
+                  </div>
+                  <div class="modal-body">
+                      <form class="form-horizontal" name="bookForm" novalidate>
+                          <!--  First Name -->
+                          <div class="form-group" ng-class="{ 'has-error': bookForm.first_name.$invalid }">
+                              <label for="title" class="col-sm-3 control-label">First Name:</label>
+                              <div class="col-sm-9">
+                                  <input type="text" name="first_name" class="form-control" placeholder="First Name" ng-model="guest.first_name" ng-minlength='2' required>
+                                  <span ng-show='bookForm.first_name.$touched && bookForm.first_name.$error.required' style="color:red">Name field cannot be empty!</span>
+                                  <span ng-show='bookForm.first_name.$touched && bookForm.first_name.$error.minlength' style="color:red">First name must have at least 2 chars!</span>
+                              </div>
+                          </div>
+                          <!--  Last Name -->
+                          <div class="form-group" ng-class="{ 'has-error': bookForm.last_name.$invalid }" >
+                              <label for="title" class="col-sm-3 control-label">Last Name:</label>
+                              <div class="col-sm-9">
+                                  <input type="text" name="last_name" class="form-control" placeholder="Last Name" ng-model="guest.last_name" ng-minlength='2' required>
+                                  <span ng-show='bookForm.last_name.$touched && bookForm.last_name.$error.required' style="color:red">Name field cannot be empty!</span>
+                                  <span ng-show='bookForm.last_name.$touched && bookForm.last_name.$error.minlength' style="color:red">Last name must have at least 2 chars!</span>
+                              </div>
+                          </div>
+                          <!--  Email -->
+                          <div class="form-group" ng-class="{ 'has-error': bookForm.email.$invalid }">
+                              <label for="" class="col-sm-3 control-label">Email:</label>
+                              <div class="col-sm-9">
+                                  <input class="form-control" name="email" placeholder="Email" type="text" ng-model="guest.email" ng-pattern="/^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/" required>
+                                  <span ng-show='bookForm.email.$touched && bookForm.email.$error.required' style="color:red">Email field cannot be empty!</span>
+                                  <span ng-show='bookForm.email.$touched && bookForm.email.$error.pattern' style="color:red">Not a valid email! Please provide a valid email.</span>
+                              </div>
+                          </div><!--  End of Email section-->
+
+                          <!--  Check-In Date -->
+                          <div class="form-group" ng-class="{ 'has-error': bookForm.date.$invalid }">
+                            <label class="col-sm-3 control-label">Check-In Date: </label>
+                            <div class="col-sm-9">
+                              <input class="form-control" type="date" name="date" ng-model="guest.checkInDate" min="{{ today | date:'yyyy-MM-dd'}}" required>
+                              <span ng-show="bookForm.date.$touched && bookForm.date.$error.required" style="color:red">Please select the Check-Out date.</span>
+                              <span ng-show="bookForm.date.$error.min" style="color:red">Please enter a date on or after the current date.</span>
+                            </div>
+                          </div><!--  End of Check-In Date -->
+
+                          <!--  Check-Out Date -->
+                          <div class="form-group" ng-class="{ 'has-error': bookForm.checkOutDate.$invalid }">
+                            <label class="col-sm-3 control-label">Check-Out Date: </label>
+                            <div class="col-sm-9">
+                              <input class="form-control" type="date" name="checkOutDate" ng-model="guest.checkOutDate" min="{{ guest.checkOutMinDate | date:'yyyy-MM-dd'}}" ng-click="checkOut(guest)" required>
+                              <span ng-show="bookForm.checkOutDate.$error.min" style="color:red">The Check-Out date must be after the selected Check-In Date</span>
+                            </div>
+                          </div><!--  End of Check-Out Date -->
+                          <div class="form-group">
+                              <div class="col-sm-12">
+                                  <button ng-hide="bookForm.$invalid" type="button" class="btn btn-warning pull-right" ng-click='confirmRoom(guest)' data-dismiss="modal" data-toggle="modal" data-target="#confirmationModal">Book</button>
+                              </div>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+</div>
+<!--  End of Guest Information Modal -->
