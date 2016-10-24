@@ -1,5 +1,11 @@
 myApp.controller('roomController', function($scope, $http, $modal) {
 
+  $scope.$on('$locationChangeSuccess', function($routeParams) {
+      var path = $location.path();
+      var product_id = $routeParams.product_id;
+      $scope.templateUrl = '/partials/navBar.html';
+  });
+
     $scope.today = new Date();
     $scope.rates = {};
 

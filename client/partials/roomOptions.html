@@ -1,0 +1,38 @@
+<script>
+    function equalHeight(group) {
+        var tallest = 0;
+        group.each(function() {
+            var thisHeight = $(this).height();
+            console.log('thisHeight = ', thisHeight);
+            if (thisHeight > tallest) {
+                tallest = thisHeight;
+            }
+        });
+        group.each(function() {
+            $(this).height(tallest + 50);
+        });
+    }
+
+    jQuery(document).ready(function() {
+        equalHeight(jQuery(".caption"));
+    });
+</script>
+
+
+  <div class="wrap" ng-repeat="room in roomData " ng-hide="$last">
+      <div class="col-xs-4 col-sm-4 col-md-4 ">
+          <div class="thumbnail">
+              <img src="{{ room.image_url}}" alt="" />
+              <div class="caption">
+                  <h4>{{ room.short_desc }}</h4>
+                  <p class="long_desc">{{ room.long_desc }}</p>
+
+                    <div class="">
+                      <h5 ng-hide="fromType">Price: {{ room.room_price }} /Night (USD) </h5>
+                      <h5 ng-show="fromType">Price: {{ room.room_price * fromType | number: 2}} /Night ({{ currency }}) </h5>
+                    </div>
+                  <a type="button"  class="btn btn-primary " data-toggle="modal" data-target="#guestInfoModal" ng-click="bookRoom(room)">Book Room</a>
+              </div>
+          </div>
+      </div>
+  </div>
