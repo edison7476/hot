@@ -12,18 +12,38 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.4/ui-bootstrap-tpls.min.js"></script>
 
     <script type='text/javascript' src='routes.js'></script>
-    <script type='text/javascript' src="Controllers/roomController.js"></script>
-    <script type='text/javascript' src="Controllers/modalController.js"></script>
-
+    <script type='text/javascript' src="frontendControllers/roomController.js"></script>
+    <script type='text/javascript' src="frontendControllers/modalController.js"></script>
 
     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <link rel="stylesheet" href="style.css" media="screen" title="no title">
+    <script type="text/javascript">
+    function equalHeight(group) {
+        var tallest = 0;
+        group.each(function() {
+            var thisHeight = $(this).height();
+            console.log('thisHeight = ', thisHeight);
+            if (thisHeight > tallest) {
+                tallest = thisHeight;
+            }
+        });
+        group.each(function() {
+            $(this).height(tallest + 50);
+        });
+    }
+    jQuery(document).ready(function() {
+        console.log('ready');
+        equalHeight(jQuery(".caption"));
+    });
 
+    </script>
 </head>
 
 <body>
 
-    <div ng-include=" 'partials/navBar.html' "></div>
+
+    <!-- <div ng-include=" 'partials/navBar.html' "></div> -->
+
     <div ng-view=""></div>
     <script src="js/jquery-1.11.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>

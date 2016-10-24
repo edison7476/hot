@@ -1,13 +1,8 @@
 myApp.controller('roomController', function($scope, $http, $modal) {
 
-  $scope.$on('$locationChangeSuccess', function($routeParams) {
-      var path = $location.path();
-      var product_id = $routeParams.product_id;
-      $scope.templateUrl = '/partials/navBar.html';
-  });
-
     $scope.today = new Date();
     $scope.rates = {};
+    $scope.selectedCurrencyRate = 1;
 
 // ###################################################################################
 //  Currency exchange rate API call
@@ -18,8 +13,9 @@ myApp.controller('roomController', function($scope, $http, $modal) {
         });
 
     $scope.forExConvert = function(value) {
-        console.log(value);
-        console.log($scope.rates);
+        $scope.selectedCurrencyRate = value;
+        console.log("$scope.selectedCurrencyRate = ", $scope.selectedCurrencyRate);
+        console.log("$scope.rates  = ", $scope.rates);
         for (var currencyKey in $scope.rates) {
             if (value === $scope.rates[currencyKey]) {
                 console.log("key = ", currencyKey, "value = ", value);
