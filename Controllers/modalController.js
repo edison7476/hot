@@ -1,6 +1,6 @@
-function geustModalController ($scope){
-    console.log("function geustModalController ($scope)");
-    $scope.dimissModal = function (){
-      console.log("dismisss");
+function modalController ($scope, $modal,  $modalInstance){
+    $scope.dismissModal = function (){
+      console.log("dismiss");
+      $modalInstance.dismiss('cancel');
     };
 }

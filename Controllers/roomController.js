@@ -35,6 +35,7 @@ myApp.controller('roomController', function($scope, $http, $modal) {
 
         // restrict the check-out date to be at least one day after the selected check-in date
         checkOutMin.setDate(checkOutDate.getDate() + 1);
+        console.log(checkOutMin);
         $scope.guest.checkOutMinDate = checkOutMin;
     };
 
@@ -42,15 +43,15 @@ myApp.controller('roomController', function($scope, $http, $modal) {
 // ###################################################################################
 // This function takes the selected room information
 // ###################################################################################
-    $scope.bookRoom = function(room) {
+    $scope.bookRoom = function(roomInformation) {
       var modalInstance = $modal.open({
          templateUrl: "modals/guestInfoModal.html",
-         controller: "roomController",
+         controller:modalController,
          scope: $scope
      });
         $scope.bookingInfo = {};
-        console.log('room = ', room);
-        $scope.bookingInfo.roomInfo = room;
+        console.log('roomInformation = ', roomInformation);
+        $scope.bookingInfo.roomInfo = roomInformation;
         console.log('bookingInfo adding roomInfo', $scope.bookingInfo);
     };
 
@@ -60,10 +61,10 @@ myApp.controller('roomController', function($scope, $http, $modal) {
     $scope.confirmRoom = function(guest) {
       var modalInstance = $modal.open({
          templateUrl: "modals/upgradeOptionModal.html",
-         controller: "roomController",
+        //  controller: "roomController",
+          controller:modalController,
          scope: $scope
      });
-
         $scope.bookingInfo.guestInfo = guest;
         // $scope.bookingInfo.total_price = $scope.bookingInfo.roomInfo.room_price * ( ($scope.bookingInfo.guestInfo.checkOutDate - $scope.bookingInfo.guestInfo.checkInDate)/86400000 );
         console.log('bookingInfo adding guestInfo', $scope.bookingInfo.guestInfo);
@@ -77,7 +78,7 @@ myApp.controller('roomController', function($scope, $http, $modal) {
 
 
 // ###################################################################################
-//
+// Function for upgrading the selected option
 // ###################################################################################
     $scope.upgrade = function(upgradeOption) {
         console.log('upgradeInfo = ', upgradeOption);
@@ -86,7 +87,7 @@ myApp.controller('roomController', function($scope, $http, $modal) {
 
 
 // ###################################################################################
-//  Add / Remove Champagne & Strawberries
+//  Funtions for adding/removing Champagne & Strawberries
 // ###################################################################################
     $scope.add = function(upgradeOption) {
         console.log('upgradeInfo = ', upgradeOption);
@@ -196,13 +197,3 @@ myApp.controller('roomController', function($scope, $http, $modal) {
     */
 
 });
-
-// order_app.filter('capitalize', function() {
-//   return function(input, scope) {
-//     console.log(input);
-//     console.log(typeof(input));
-//     if (typeof(input) !== "undefined")
-//     input = input.toLowerCase();
-//     return input.substring(0,1).toUpperCase()+input.substring(1);
-//   };
-// });
