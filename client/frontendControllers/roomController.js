@@ -3,6 +3,7 @@ myApp.controller('roomController', function($scope, $http, $modal) {
     $scope.today = new Date();
     $scope.rates = {};
     $scope.selectedCurrencyRate = 1;
+    $scope.currency = "USD";
 
 // ###################################################################################
 //  Currency exchange rate API call
@@ -12,15 +13,29 @@ myApp.controller('roomController', function($scope, $http, $modal) {
             $scope.rates = res.data.rates;
         });
 
+
     $scope.forExConvert = function(value) {
-        $scope.selectedCurrencyRate = value;
-        console.log("$scope.selectedCurrencyRate = ", $scope.selectedCurrencyRate);
+        // console.log("value = ", value);
+
         console.log("$scope.rates  = ", $scope.rates);
+
+        if(value === undefined) {
+          value = 1;
+          $scope.currency = "USD";
+        }
+
+        $scope.selectedCurrencyRate = value;
+
+
+        console.log("$scope.selectedCurrencyRate = ", $scope.selectedCurrencyRate);
+        console.log("$scope.currency = ", $scope.currency);
+
         for (var currencyKey in $scope.rates) {
             if (value === $scope.rates[currencyKey]) {
                 console.log("key = ", currencyKey, "value = ", value);
                 $scope.currency = currencyKey;
                 console.log("$scope.currency", $scope.currency);
+                break;
             }
         }
     };

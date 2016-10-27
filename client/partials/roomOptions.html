@@ -40,8 +40,9 @@
                   <h4>{{ room.short_desc }}</h4>
                   <p class="long_desc">{{ room.long_desc }}</p>
                     <div class="">
-                      <h5 ng-hide="fromType">Price: {{ room.room_price * (selectedCurrencyRate || 1 ) }} /Night (USD) </h5>
-                      <h5 ng-show="fromType">Price: {{ room.room_price * fromType | number: 2}} /Night ({{ currency }}) </h5>
+                      <h5 >Price: {{ room.room_price * selectedCurrencyRate | number: 2 }} /Night ({{ currency }})  </h5>
+                      <!-- <h5 ng-hide="fromType">Price: {{ room.room_price * selectedCurrencyRate | number: 2 }} /Night ({{ currency }})  </h5>
+                      <h5 ng-show="fromType">Price: {{ room.room_price * fromType | number: 2}} /Night ({{ currency }}) </h5> -->
                     </div>
                   <a type="button"  class="btn btn-primary " data-toggle="modal" data-target="#guestInfoModal" ng-click="bookRoom(room)">Book Room</a>
               </div>
