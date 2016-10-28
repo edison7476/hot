@@ -1,3 +1,6 @@
+
+
+
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -17,12 +20,21 @@
 
             <ul class="nav navbar-nav navbar-right">
 <!-- currency convert selection -->
-                  <div class=" currencySelection">
+                  <!-- <div class=" currencySelection">
                     <select ng-model="fromType" class="form-control" required
-                            data-ng-change="forExConvert(fromType)"
+                            ng-init=" key === 'USD' "
+                            ng-change="forExConvert(fromType)"
                             style="display: inline-block"
                             ng-options="key for (key, value) in rates track by value">
                       <option value="">USD -- Select Currency --</option>
+                    </select> -->
+
+                    <select ng-model="chooseCurrency" class="form-control" required
+                            ng-init=" "
+
+                            style="display: inline-block"
+                            ng-options="key as key[0] for key in ratesArr ">
+                      <option value="">-- Select Currency --</option>
                     </select>
                   </div>
 <!-- End of currency convert selection -->
@@ -40,11 +52,9 @@
                   <h4>{{ room.short_desc }}</h4>
                   <p class="long_desc">{{ room.long_desc }}</p>
                     <div class="">
-                      <h5 >Price: {{ room.room_price * selectedCurrencyRate | number: 2 }} /Night ({{ currency }})  </h5>
-                      <!-- <h5 ng-hide="fromType">Price: {{ room.room_price * selectedCurrencyRate | number: 2 }} /Night ({{ currency }})  </h5>
-                      <h5 ng-show="fromType">Price: {{ room.room_price * fromType | number: 2}} /Night ({{ currency }}) </h5> -->
+                      <h5 ng-show="chooseCurrency">Price: {{ room.room_price * chooseCurrency[1] | number: 2 }} /Night ({{ chooseCurrency[0] }})  </h5>
                     </div>
-                  <a type="button"  class="btn btn-primary " data-toggle="modal" data-target="#guestInfoModal" ng-click="bookRoom(room)">Book Room</a>
+                  <a href="modals/guestInfoModal.html" type="button"  class="btn btn-primary " data-toggle="modal" data-target="#guestInfoModal" ng-click="selectRoom(room)">Book Room</a>
               </div>
           </div>
       </div>

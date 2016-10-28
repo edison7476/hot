@@ -2,8 +2,7 @@ myApp.controller('roomController', function($scope, $http, $modal) {
 
     $scope.today = new Date();
     $scope.rates = {};
-    $scope.selectedCurrencyRate = 1;
-    $scope.currency = "USD";
+    $scope.ratesArr = [];
 
 // ###################################################################################
 //  Currency exchange rate API call
@@ -11,46 +10,46 @@ myApp.controller('roomController', function($scope, $http, $modal) {
     $http.get('http://api.fixer.io/latest?base=USD')
         .then(function(res) {
             $scope.rates = res.data.rates;
+            for (var key in $scope.rates){
+              $scope.ratesArr.push([key, $scope.rates[key]] );
+            }
+            $scope.ratesArr.unshift(['USD', 1]);
+            // console.log("$scope.ratesArr = ", $scope.ratesArr);
         });
 
-
-    $scope.forExConvert = function(value) {
-        // console.log("value = ", value);
-
-        console.log("$scope.rates  = ", $scope.rates);
-
-        if(value === undefined) {
-          value = 1;
-          $scope.currency = "USD";
-        }
-
-        $scope.selectedCurrencyRate = value;
-
-
-        console.log("$scope.selectedCurrencyRate = ", $scope.selectedCurrencyRate);
-        console.log("$scope.currency = ", $scope.currency);
-
-        for (var currencyKey in $scope.rates) {
-            if (value === $scope.rates[currencyKey]) {
-                console.log("key = ", currencyKey, "value = ", value);
-                $scope.currency = currencyKey;
-                console.log("$scope.currency", $scope.currency);
-                break;
-            }
-        }
-    };
+    //
+    // $scope.forExConvert = function(rate) {
+    //
+    //     console.log("$scope.rates  = ", $scope.rates);
+    //     console.log("$scope.fromType  = ", $scope.fromType);
+    //     console.log("chooseCurrency = ", $scope.chooseCurrency);
+    //
+    //     $scope.selectedCurrencyRate = rate;
+    //     console.log("$scope.selectedCurrencyRate = ", $scope.selectedCurrencyRate);
+    //
+    //
+    //     // for (var currencyKey in $scope.rates) {
+    //     //     if (rate === $scope.rates[currencyKey]) {
+    //     //         $scope.currency = currencyKey;
+    //     //
+    //     //         console.log("key = ", currencyKey, "rate = ", rate);
+    //     //         console.log("$scope.currency", $scope.currency);
+    //     //         break;
+    //     //     }
+    //     // }
+    // };
 
 // ###################################################################################
 // setting the check out date to be at lease one day after the check In date
 // ###################################################################################
     $scope.checkOut = function(guest) {
-        console.log("guest.checkInDate = ", guest.checkInDate);
+        // console.log("guest.checkInDate = ", guest.checkInDate);
         var checkOutMin = new Date();
         var checkOutDate = guest.checkInDate;
 
         // restrict the check-out date to be at least one day after the selected check-in date
         checkOutMin.setDate(checkOutDate.getDate() + 1);
-        console.log(checkOutMin);
+        // console.log(checkOutMin);
         $scope.guest.checkOutMinDate = checkOutMin;
     };
 
@@ -58,37 +57,55 @@ myApp.controller('roomController', function($scope, $http, $modal) {
 // ###################################################################################
 // This function takes the selected room information
 // ###################################################################################
-    $scope.bookRoom = function(roomInformation) {
+    $scope.selectRoom = function(roomInformation) {
       var modalInstance = $modal.open({
          templateUrl: "modals/guestInfoModal.html",
          controller:modalController,
          scope: $scope
-     });
+      });
         $scope.bookingInfo = {};
         console.log('roomInformation = ', roomInformation);
         $scope.bookingInfo.roomInfo = roomInformation;
         console.log('bookingInfo adding roomInfo', $scope.bookingInfo);
     };
 
+    $scope.dismissModal = function ($scope, $modalInstance){
+      $scope.dismiss = function(){
+         $modalInstance.dismiss('cancel');
+      };
+    };
+
 // ###################################################################################
 //
 // ###################################################################################
-    $scope.confirmRoom = function(guest) {
+    $scope.bookRoom = function(guest) {
+
       var modalInstance = $modal.open({
-         templateUrl: "modals/upgradeOptionModal.html",
+        templateUrl: "modals/upgradeOptionModal.html",
         //  controller: "roomController",
-          controller:modalController,
-         scope: $scope
-     });
+        controller: function ($scope, $modalInstance, $log) {
+          $scope.confirmRoom = function (){
+            $modalInstance.dismiss('cancel');
+            };
+          },
+          scope: $scope
+        });
+
         $scope.bookingInfo.guestInfo = guest;
+        $scope.stayInDays = ($scope.bookingInfo.guestInfo.checkOutDate - $scope.bookingInfo.guestInfo.checkInDate)/86400000 ;
         // $scope.bookingInfo.total_price = $scope.bookingInfo.roomInfo.room_price * ( ($scope.bookingInfo.guestInfo.checkOutDate - $scope.bookingInfo.guestInfo.checkInDate)/86400000 );
+
+        console.log('bookingInfo adding guestInfo', $scope.bookingInfo);
+        console.log("$scope.bookingInfo.roomInfo.room_price ", $scope.bookingInfo.roomInfo.room_price);
+        $scope.total_price = $scope.chooseCurrency[1] *  $scope.stayInDays * ($scope.bookingInfo.roomInfo.room_price  + ($scope.bookingInfo.ChampagneStrawberries.room_price || 0 ) ) ;
         console.log('bookingInfo adding guestInfo', $scope.bookingInfo.guestInfo);
         $scope.guest = {};
         $scope.room = {};
-        console.log('After cleaning guest and room scope - book room info', $scope.bookingInfo);
-
-        console.log("$scope.guest = ", $scope.guest);
-        console.log("scope.room = ", $scope.room);
+        console.log("$scope.stayInDays ",$scope.stayInDays);
+        // console.log('After cleaning guest and room scope - book room info', $scope.bookingInfo);
+        //
+        // console.log("$scope.guest = ", $scope.guest);
+        // console.log("scope.room = ", $scope.room);
     };
 
 
@@ -96,7 +113,7 @@ myApp.controller('roomController', function($scope, $http, $modal) {
 // Function for upgrading the selected option
 // ###################################################################################
     $scope.upgrade = function(upgradeOption) {
-        console.log('upgradeInfo = ', upgradeOption);
+        // console.log('upgradeInfo = ', upgradeOption);
         $scope.bookingInfo.roomInfo = upgradeOption;
     };
 
@@ -132,7 +149,8 @@ myApp.controller('roomController', function($scope, $http, $modal) {
             email: bookingInfo.guestInfo.email,
             room_code: bookingInfo.roomInfo.room_code,
             item_id: bookingInfo.roomInfo.item_id,
-            total: ($scope.bookingInfo.roomInfo.room_price * (($scope.bookingInfo.guestInfo.checkOutDate - $scope.bookingInfo.guestInfo.checkInDate) / 86400000)) + bookingInfo.ChampagneStrawberries.room_price
+            totalUSD: $scope.stayInDays * ($scope.bookingInfo.roomInfo.room_price  + ($scope.bookingInfo.ChampagneStrawberries.room_price || 0 ) ),
+            total: [$scope.chooseCurrency[1] *  $scope.stayInDays * ($scope.bookingInfo.roomInfo.room_price  + ($scope.bookingInfo.ChampagneStrawberries.room_price || 0 ) ), $scope.chooseCurrency[0]]
         };
         console.log("bookedRoomInfo = ", bookedRoomInfo);
         //then pass bookedRoomInfo to factory

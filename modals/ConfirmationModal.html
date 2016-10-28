@@ -22,8 +22,7 @@
                     <p>{{ bookingInfo.roomInfo.short_desc }}</p>
                     <p>{{ bookingInfo.guestInfo.checkInDate | date }}</p>
                     <p>{{ bookingInfo.guestInfo.checkOutDate| date }}</p>
-                    <p ng-hide="fromType">{{ (bookingInfo.roomInfo.room_price * ((bookingInfo.guestInfo.checkOutDate - bookingInfo.guestInfo.checkInDate)/86400000))+ bookingInfo.ChampagneStrawberries.room_price }} (USD) </p>
-                    <p ng-show="fromType">{{ fromType * (bookingInfo.roomInfo.room_price * ( (bookingInfo.guestInfo.checkOutDate - bookingInfo.guestInfo.checkInDate)/86400000 ) + bookingInfo.ChampagneStrawberries.room_price ) | number: 2}} ({{ currency }}) </p>
+                    <p >{{ chooseCurrency[1] * (bookingInfo.roomInfo.room_price * stayInDays + bookingInfo.ChampagneStrawberries.room_price ) | number: 2}} ({{ chooseCurrency[0] }})  </p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Finish</button>

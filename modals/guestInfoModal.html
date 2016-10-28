@@ -1,12 +1,12 @@
 <!--  Guest Information Modal -->
 <div ng-controller="roomController" >
-              <div class="modal-content">
+
                   <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="dismissModal()"><span aria-hidden="true">&times;</span></button>
                       <h4 class="modal-title" id="myModalLabel">Booking Information</h4>
                   </div>
                   <div class="modal-body">
-                      <form class="form-horizontal" name="bookForm" novalidate>
+                      <form class="form-horizontal" name="bookForm"  novalidate>
                           <!--  First Name -->
                           <div class="form-group" ng-class="{ 'has-error': bookForm.first_name.$invalid }">
                               <label for="title" class="col-sm-3 control-label">First Name:</label>
@@ -55,11 +55,11 @@
                           </div><!--  End of Check-Out Date -->
                           <div class="form-group">
                               <div class="col-sm-12">
-                                  <button ng-hide="bookForm.$invalid" type="button" class="btn btn-warning pull-right" ng-click='confirmRoom(guest)' data-dismiss="modal" data-toggle="modal" data-target="#confirmationModal">Book</button>
+                                  <button id="confirmRoom" ng-hide="bookForm.$invalid" type="button" class="btn btn-warning pull-right" ng-click='bookRoom(guest)' data-dismiss="modal" data-toggle="modal" data-target="#confirmationModal">Book</button>
                               </div>
                           </div>
                       </form>
                   </div>
-              </div>
+
 </div>
 <!--  End of Guest Information Modal -->

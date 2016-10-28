@@ -34,17 +34,27 @@
     jQuery(document).ready(function() {
         console.log('ready');
         equalHeight(jQuery(".caption"));
+
+        jQuery("#confirmRoom").on('click', function (){
+          console.log("confirmRoom modal");
+        })
+
+        jQuery("#roomOptions").on('click', function (){
+          console.log("roomOptions modal");
+        })
     });
 
     </script>
 </head>
 
-<body>
+<body >
 
 
     <!-- <div ng-include=" 'partials/navBar.html' "></div> -->
 
     <div ng-view=""></div>
+  
+
     <script src="js/jquery-1.11.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 </body>
